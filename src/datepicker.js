@@ -542,6 +542,7 @@ function sanitizeOptions(opts) {
   var position = options.position
   var maxDate = options.maxDate
   var minDate = options.minDate
+  var minDays = options.minDays
   var dateSelected = options.dateSelected
   var overlayPlaceholder = options.overlayPlaceholder
   var overlayButton = options.overlayButton
@@ -563,7 +564,7 @@ function sanitizeOptions(opts) {
     return acc
   }, {})
 
-  // If id was provided, it cannot me null or undefined.
+  // If id was provided, it cannot be null or undefined.
   if (options.hasOwnProperty('id') && id == null) {
     throw new Error('`id` cannot be `null` or `undefined`')
   }
