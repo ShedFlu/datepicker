@@ -278,6 +278,9 @@ function createInstance(selectorOrElement, opts) {
     // High end of selectable dates - overriden for daterange pairs below.
     maxDate: options.maxDate,
 
+    // Minimum number of selected days between start and end date.
+    minDays: options.minDays,
+
     // Disabled the ability to select days on the weekend.
     noWeekends: !!options.noWeekends,
 
@@ -412,6 +415,7 @@ function createInstance(selectorOrElement, opts) {
     var second = instance
     var minDate = first.minDate || second.minDate
     var maxDate = first.maxDate || second.maxDate
+    var minDays = first.minDays || second.minDays
 
     // Store the 1st instance as a sibling on the 2nd.
     second.sibling = first
@@ -425,8 +429,10 @@ function createInstance(selectorOrElement, opts) {
     */
     first.minDate = minDate
     first.maxDate = maxDate
+    first.minDays = minDays
     second.minDate = minDate
     second.maxDate = maxDate
+    second.minDays = minDays
 
     // Used to restore the min / max dates when a date is deselected.
     first.originalMinDate = minDate
@@ -1003,14 +1009,24 @@ function adjustDateranges(args) {
       first.minDate = first.originalMinDate
       second.minDate = second.originalMinDate
     } else {
-      second.minDate = first.dateSelected
+      if (first.minDays > 0) {
+        second.minDate = new Date(first.dateSelected)
+        second.minDate.setDate(second.minDate.getDate() + first.minDays)
+      } else {
+        second.minDate = first.dateSelected
+      }
     }
   } else {
     if (args.deselect) {
       second.maxDate = second.originalMaxDate
       first.maxDate = first.originalMaxDate
     } else {
-      first.maxDate = second.dateSelected
+      if (first.minDays > 0) {
+        first.maxDate = new Date(second.dateSelected)
+        first.maxDate.setDate(first.maxDate.getDate() - first.minDays)
+      } else {
+        first.maxDate = second.dateSelected
+      }
     }
   }
 }
