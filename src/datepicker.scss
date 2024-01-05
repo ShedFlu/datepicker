@@ -294,13 +294,21 @@ $lightblue: lightblue;
   }
 }
 
-.qs-disabled,
+.qs-disabled:not(.qs-range-start):not(.qs-range-middle):not(.qs-range-end),
 .qs-outside-current-month {
   opacity: .2;
 }
 
 .qs-disabled {
   cursor: not-allowed;
+}
+
+ .qs-disabled {
+  &.qs-range-start,
+  &.qs-range-middle,
+  &.qs-range-end {
+    opacity: .6;
+  }
 }
 
 .qs-empty {
